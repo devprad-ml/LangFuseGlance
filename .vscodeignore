@@ -1,0 +1,15 @@
+src/**
+test/**
+docs/**
+.github/**
+.vscode/**
+.claude/**
+**/*.map
+**/*.ts
+esbuild.js
+tsconfig.json
+.eslintrc.json
+package-lock.json
+design.md
+post.md
+.gitignore

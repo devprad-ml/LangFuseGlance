@@ -3,6 +3,13 @@
   "displayName": "LangFuse Glance",
   "description": "A minimal, always-current sidebar view of your LangFuse traces.",
   "version": "0.0.1",
+  "publisher": "devprad-ml",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devprad-ml/LangFuse-simple-tracker-tool.git"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
