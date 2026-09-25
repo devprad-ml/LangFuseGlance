@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "id": "obs-1",
+      "traceId": "trace-1",
+      "name": "agent-call",
+      "startTime": "2026-09-22T10:00:00.000Z",
+      "endTime": "2026-09-22T10:00:00.800Z",
+      "level": "DEFAULT",
+      "model": "gpt-4o",
+      "totalTokens": 320,
+      "totalCost": 0.0015
+    },
+    {
+      "id": "obs-2",
+      "traceId": "trace-2",
+      "name": "agent-call-failed",
+      "startTime": "2026-09-22T09:55:00.000Z",
+      "endTime": "2026-09-22T09:55:00.200Z",
+      "level": "ERROR",
+      "model": "gpt-4o-mini"
+    }
+  ]
+}
