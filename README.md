@@ -5,8 +5,7 @@ backend, no other vendor, no floating window — one list of recent calls (model
 inline), one summary strip, and click-to-expand details for each call, with an optional
 link to LangFuse's own UI for deep debugging.
 
-See `design.md` for the full architecture brief and rationale, and `docs/adr/` for
-decision records.
+See `docs/adr/` for decision records.
 
 ## Setup
 
