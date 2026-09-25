@@ -7,6 +7,9 @@ link to LangFuse's own UI for deep debugging.
 
 <<<<<<< HEAD
 See `docs/adr/` for the architecture decision records.
+=======
+See `docs/adr/` for decision records.
+>>>>>>> 83c751d53f18df1b693d53185eaee4c053947b1f
 
 ## Setup
 
