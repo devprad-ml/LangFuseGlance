@@ -53,8 +53,10 @@ export class Poller {
   private async tick(): Promise<void> {
     try {
       const raw = await this.client.fetchRecentTraces(TRACE_LIMIT);
-      const rows = normalize(raw, this.normalizeOptions);
-      this.cache.replace(rows);
+      // Stopped mid-request (e.g. disconnect) — don't repopulate a cache that was just reset.
+      if (!this.started) return;
+      this.cache.replace(normalize(raw, this.normalizeOptions));
+      const rows = this.cache.getAll(); // post-cutoff rows, so a "clear" isn't undone
       this.onUpdate(rows, summarize(rows));
       this.backoffMs = this.baseIntervalMs;
     } catch (err) {

@@ -15,6 +15,12 @@ Press F5 in VS Code (or the Extension Development Host launch config) to run the
 extension. Use the command **LangFuse Glance: Configure Connection** to set your
 LangFuse base URL, public key, and secret key (stored in `SecretStorage`).
 
+Sidebar toolbar:
+- **Clear** hides every call made so far; only new calls appear after that. It's a
+  view filter for this session, nothing is deleted in LangFuse.
+- **Disconnect** removes your saved keys from this machine and stops polling.
+  **Connect** (shown while disconnected) sets them up again.
+
 ## Security: what happens to your keys
 
 - Your public and secret keys are stored in your OS keychain via VS Code's

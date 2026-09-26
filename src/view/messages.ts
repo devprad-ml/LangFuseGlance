@@ -11,4 +11,5 @@ export type OutboundMessage =
 export type InboundMessage =
   | { type: "openInLangFuse"; url: string }
   | { type: "refreshNow" }
-  | { type: "openSettings" };
+  | { type: "openSettings" }
+  | { type: "ready" }; // webview script loaded; ext-host replies with current state

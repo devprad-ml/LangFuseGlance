@@ -100,6 +100,8 @@ window.addEventListener("message", (event: MessageEvent<OutboundMessage>) => {
     renderSummary(msg.summary);
     renderRows(msg.rows);
   } else if (msg.type === "needsConfiguration") {
+    rowsEl.innerHTML = "";
+    summaryEl.innerHTML = "";
     emptyEl.hidden = false;
     emptyText.textContent = "No connection configured.";
     configureLink.hidden = false;
@@ -107,3 +109,6 @@ window.addEventListener("message", (event: MessageEvent<OutboundMessage>) => {
     renderError(msg.error);
   }
 });
+
+// Messages posted before this script loaded are lost, so ask for the current state.
+vscode.postMessage({ type: "ready" });

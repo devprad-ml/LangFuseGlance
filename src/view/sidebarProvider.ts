@@ -9,6 +9,9 @@ import type { PollerError } from "../data/poller";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   private view: vscode.WebviewView | undefined;
+  // Remembered so a webview that loads (or reloads after being hidden) after the
+  // "no connection" signal still shows the setup prompt instead of a blank panel.
+  private needsConfiguration = false;
 
   constructor(
     private extensionUri: vscode.Uri,
@@ -20,6 +23,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   setPoller(poller: Poller | null): void {
     this.poller?.stop();
     this.poller = poller;
+    if (poller) this.needsConfiguration = false;
     if (this.view?.visible) {
       this.poller?.start();
     }
@@ -27,11 +31,16 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
   postUpdate(): void {
     if (!this.view) return;
+    if (this.needsConfiguration) {
+      this.post({ type: "needsConfiguration" });
+      return;
+    }
     const rows = this.cache.getAll();
     this.post({ type: "update", rows, summary: summarize(rows) });
   }
 
   postNeedsConfiguration(): void {
+    this.needsConfiguration = true;
     this.post({ type: "needsConfiguration" });
   }
 
@@ -58,6 +67,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         void this.poller?.tickNow();
       } else if (message.type === "openSettings") {
         this.onOpenSettings();
+      } else if (message.type === "ready") {
+        this.postUpdate();
       }
     });
 

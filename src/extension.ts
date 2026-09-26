@@ -25,8 +25,14 @@ export function activate(context: vscode.ExtensionContext): void {
 
   let currentConfig: ConnectionConfig | null = null;
 
+  // Drives which toolbar icon shows: Disconnect when connected, Connect when not.
+  function setConnected(connected: boolean): void {
+    void vscode.commands.executeCommand("setContext", "langfuseGlance.connected", connected);
+  }
+
   function wireConnection(config: ConnectionConfig): void {
     currentConfig = config;
+    setConnected(true);
     const client = new LangFuseClient(config);
     const poller = new Poller(
       client,
@@ -48,6 +54,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   void secretStore.get().then(async (existing) => {
     if (!existing) {
+      setConnected(false);
       sidebarProvider.postNeedsConfiguration();
       return;
     }
@@ -70,6 +77,24 @@ export function activate(context: vscode.ExtensionContext): void {
       if (config) {
         wireConnection(config);
       }
+    }),
+    vscode.commands.registerCommand("langfuseGlance.clear", () => {
+      cache.clear();
+      sidebarProvider.postUpdate();
+    }),
+    vscode.commands.registerCommand("langfuseGlance.disconnect", async () => {
+      const choice = await vscode.window.showWarningMessage(
+        "Disconnect LangFuse Glance? Your saved keys will be removed from this machine; you'll need to re-enter them to reconnect.",
+        { modal: true },
+        "Disconnect"
+      );
+      if (choice !== "Disconnect") return;
+      sidebarProvider.setPoller(null);
+      await secretStore.clear();
+      cache.reset();
+      currentConfig = null;
+      setConnected(false);
+      sidebarProvider.postNeedsConfiguration();
     }),
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (currentConfig && e.affectsConfiguration("langfuseGlance.pollIntervalSeconds")) {

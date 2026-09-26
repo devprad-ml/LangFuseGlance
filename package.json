@@ -2,7 +2,7 @@
   "name": "langfuse-glance",
   "displayName": "LangFuse Glance",
   "description": "A minimal, always-current sidebar view of your LangFuse traces.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "devprad-ml",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -13,7 +13,9 @@
   "engines": {
     "vscode": "^1.90.0"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -38,7 +40,18 @@
     "commands": [
       {
         "command": "langfuseGlance.configureConnection",
-        "title": "LangFuse Glance: Configure Connection"
+        "title": "LangFuse Glance: Configure Connection",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "langfuseGlance.clear",
+        "title": "LangFuse Glance: Clear List (show only new calls)",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "langfuseGlance.disconnect",
+        "title": "LangFuse Glance: Disconnect",
+        "icon": "$(debug-disconnect)"
       }
     ],
     "configuration": {
@@ -50,6 +63,35 @@
           "description": "How often to poll LangFuse for recent traces, in seconds."
         }
       }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "langfuseGlance.clear",
+          "when": "view == langfuseGlance.sidebar && langfuseGlance.connected",
+          "group": "navigation@1"
+        },
+        {
+          "command": "langfuseGlance.disconnect",
+          "when": "view == langfuseGlance.sidebar && langfuseGlance.connected",
+          "group": "navigation@2"
+        },
+        {
+          "command": "langfuseGlance.configureConnection",
+          "when": "view == langfuseGlance.sidebar && !langfuseGlance.connected",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "langfuseGlance.clear",
+          "when": "langfuseGlance.connected"
+        },
+        {
+          "command": "langfuseGlance.disconnect",
+          "when": "langfuseGlance.connected"
+        }
+      ]
     }
   },
   "scripts": {

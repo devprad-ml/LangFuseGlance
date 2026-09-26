@@ -34,6 +34,21 @@ describe("Poller", () => {
     poller.stop();
   });
 
+  it("ignores a response that lands after stop() (e.g. disconnect mid-request)", async () => {
+    let resolveFetch: (v: unknown[]) => void = () => {};
+    const client = makeClient(() => new Promise((r) => (resolveFetch = r)));
+    const cache = new Cache(100);
+    const onUpdate = vi.fn();
+    const poller = new Poller(client, cache, normalizeOptions, onUpdate, vi.fn(), BASE_INTERVAL);
+
+    poller.start();
+    poller.stop();
+    resolveFetch([{ id: "o1", traceId: "t1", startTime: "2026-09-22T10:00:00.000Z" }]);
+    await vi.waitFor(() => Promise.resolve());
+    expect(onUpdate).not.toHaveBeenCalled();
+    expect(cache.getAll()).toHaveLength(0);
+  });
+
   it("does not double-start", async () => {
     const fetchFn = vi.fn().mockResolvedValue([]);
     const client = makeClient(fetchFn);
